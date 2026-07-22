@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget id="KPI_Dashboard_Advanced"
+        version="1.0"
+        xmlns="http://www.ibm.com/doors/widget">
+
+    <metadata>
+        <name>Advanced DOORS KPI Dashboard</name>
+        <author>Alexandre Pham</author>
+        <description>
+            Multi-function KPI widget for requirements management.
+        </description>
+        <category>Dashboard</category>
+    </metadata>
+
+    <configuration>
+
+        <refreshInterval>300</refreshInterval>
+
+        <dataSource type="DOORS">
+            <project>${PROJECT}</project>
+            <module>${MODULE}</module>
+        </dataSource>
+
+        <filters>
+
+            <filter id="baselineFilter">
+                <label>Baseline</label>
+                <type>dropdown</type>
+            </filter>
+
+            <filter id="moduleFilter">
+                <label>Module</label>
+                <type>dropdown</type>
+            </filter>
+
+            <filter id="statusFilter">
+                <label>Status</label>
+                <type>multi-select</type>
+            </filter>
+
+            <filter id="priorityFilter">
+                <label>Priority</label>
+                <type>multi-select</type>
+            </filter>
+
+            <filter id="dateRange">
+                <label>Date Range</label>
+                <type>date-range</type>
+            </filter>
+
+        </filters>
+
+    </configuration>
+
+    <layout>
+
+        <row>
+
+            <kpi id="totalRequirements">
+                <title>Total Requirements</title>
+                <query>
+                    SELECT COUNT(*)
+                </query>
+                <format type="number"/>
+                <color>#1976D2</color>
+            </kpi>
+
+            <kpi id="approvedRequirements">
+                <title>Approved</title>
+                <query>
+                    SELECT COUNT(*) WHERE Status='Approved'
+                </query>
+                <format type="number"/>
+                <color>#2E7D32</color>
+            </kpi>
+
+            <kpi id="verifiedRequirements">
+                <title>Verified</title>
+                <query>
+                    SELECT COUNT(*) WHERE Verification='Passed'
+                </query>
+                <format type="number"/>
+                <color>#388E3C</color>
+            </kpi>
+
+            <kpi id="pendingRequirements">
+                <title>Pending Review</title>
+                <query>
+                    SELECT COUNT(*) WHERE Status='Review'
+                </query>
+                <format type="number"/>
+                <color>#F57C00</color>
+            </kpi>
+
+        </row>
+
+        <row>
+
+            <kpi id="traceabilityCoverage">
+                <title>Traceability Coverage</title>
+                <query>
+                    TRACEABILITY_PERCENT()
+                </query>
+                <format type="percent"/>
+                <thresholds>
+
+                    <threshold min="90" color="#2E7D32"/>
+                    <threshold min="70" color="#F9A825"/>
+                    <threshold min="0" color="#C62828"/>
+
+                </thresholds>
+            </kpi>
+
+            <kpi id="verificationCoverage">
+                <title>Verification Coverage</title>
+                <query>
+                    VERIFIED_PERCENT()
+                </query>
+                <format type="percent"/>
+            </kpi>
+
+            <kpi id="requirementsWithLinks">
+                <title>Objects with Links</title>
+                <query>
+                    COUNT_LINKED_OBJECTS()
+                </query>
+                <format type="number"/>
+            </kpi>
+
+            <kpi id="suspectLinks">
+                <title>Suspect Links</title>
+                <query>
+                    COUNT_SUSPECT_LINKS()
+                </query>
+                <format type="number"/>
+                <color>#D32F2F</color>
+            </kpi>
+
+        </row>
+
+        <row>
+
+            <chart id="statusDistribution"
+                   type="pie">
+
+                <title>Status Distribution</title>
+
+                <series>
+                    <field>Status</field>
+                </series>
+
+            </chart>
+
+            <chart id="requirementsTrend"
+                   type="line">
+
+                <title>Requirements Growth</title>
+
+                <series>
+                    <field>CreationDate</field>
+                    <aggregation>COUNT</aggregation>
+                </series>
+
+            </chart>
+
+        </row>
+
+        <row>
+
+            <table id="highRiskRequirements">
+
+                <title>High Risk Requirements</title>
+
+                <columns>
+
+                    <column>ID</column>
+                    <column>Object Heading</column>
+                    <column>Status</column>
+                    <column>Priority</column>
+                    <column>Owner</column>
+                    <column>Verification</column>
+
+                </columns>
+
+                <filter>
+                    Priority='High'
+                </filter>
+
+            </table>
+
+        </row>
+
+    </layout>
+
+    <actions>
+
+        <action id="exportExcel">
+            <label>Export to Excel</label>
+        </action>
+
+        <action id="exportCsv">
+            <label>Export CSV</label>
+        </action>
+
+        <action id="exportPdf">
+            <label>Export PDF</label>
+        </action>
+
+        <action id="openModule">
+            <label>Open Module</label>
+        </action>
+
+        <action id="openBaseline">
+            <label>Open Baseline</label>
+        </action>
+
+        <action id="refreshData">
+            <label>Refresh</label>
+        </action>
+
+    </actions>
+
+</widget>
