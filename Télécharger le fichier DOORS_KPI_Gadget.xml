@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="DOORS KPI Dashboard" description="Requirements KPI Widget" author="Alexandre Pham" height="450" scrolling="true">
+<Require feature="dynamic-height"/>
+<Require feature="settitle"/>
+</ModulePrefs>
+<UserPref name="moduleName" display_name="DOORS Module" required="false" default_value="System Requirements"/>
+<Content type="html"><![CDATA[
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;margin:10px;}
+.kpi-container{display:flex;flex-wrap:wrap;gap:10px;}
+.kpi-card{width:180px;border-radius:8px;padding:15px;color:white;text-align:center;font-weight:bold;}
+.blue{background:#0078D4;} .green{background:#107C10;} .orange{background:#FF8C00;} .red{background:#D13438;}
+.kpi-value{font-size:32px;margin-top:10px;}
+</style>
+<script>
+function refreshKPIs(){document.getElementById('totalReq').innerHTML='1250';document.getElementById('approvedReq').innerHTML='1024';document.getElementById('traceability').innerHTML='92%';document.getElementById('suspectLinks').innerHTML='17';}
+gadgets.util.registerOnLoadHandler(function(){gadgets.window.adjustHeight();refreshKPIs();});
+</script>
+<div class="kpi-container">
+<div class="kpi-card blue">Total Requirements<div id="totalReq" class="kpi-value">0</div></div>
+<div class="kpi-card green">Approved<div id="approvedReq" class="kpi-value">0</div></div>
+<div class="kpi-card orange">Traceability<div id="traceability" class="kpi-value">0%</div></div>
+<div class="kpi-card red">Suspect Links<div id="suspectLinks" class="kpi-value">0</div></div>
+</div>
+]]></Content>
+</Module>
